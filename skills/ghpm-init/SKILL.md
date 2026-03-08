@@ -1,6 +1,6 @@
 ---
 name: ghpm-init
-description: "Initialize GitHub Project Management config. Auto-discovers project schema (fields, views, repos) and generates .ghpm.json + .ghpm-cache.json."
+description: "Initialize GitHub Project Management config. Auto-discovers project schema (fields, views, repos) and generates .ghpm/config.json + .ghpm/cache.json."
 allowed-tools: Bash(gh:*), Bash(mkdir:*), Read, Write, Grep
 ---
 
@@ -80,7 +80,7 @@ gh api graphql -f query='
 
 ### Phase 5: Write Config Files
 
-13. Assemble `.ghpm.json` with this structure:
+13. Assemble `.ghpm/config.json` with this structure:
 
 ```json
 {
@@ -118,6 +118,11 @@ gh api graphql -f query='
   "cache": {
     "ttl_minutes": 30
   },
+  "conventions": {
+    "branch": "{type}/{issue-number}/{slug}. Detect type from issue labels and title: bug→fix, enhancement/feature→feat, documentation→docs, test→test, refactor→refactor, default→chore",
+    "status_sync": "On start, set to InProgress if currently Planned or ReadyForDev. On session end with merged PR, set to Done.",
+    "decisions": "When a design decision is detected, nudge before recording. Post as issue comment."
+  },
   "repos": ["<owner>/<repo>"]
 }
 ```
@@ -127,13 +132,32 @@ gh api graphql -f query='
 - Only include `options` on fields that are `single_select` or `iteration` type.
 - Strip the full URL from repos, keep just `owner/repo`.
 
-14. Write `.ghpm-cache.json` per `../ghpm-shared/references/cache.md`.
+14. Write `.ghpm/cache.json` per `../ghpm-shared/references/cache.md`.
 
-15. Check if `.gitignore` exists. If it does, check if `.ghpm.json` and `.ghpm-cache.json` are already listed. If not, append the missing entries. If `.gitignore` doesn't exist, create it with both entries.
+15. Run `mkdir -p .ghpm/sessions`. Check if `.gitignore` exists. If it does, check if `.ghpm/` is already listed. If not, append `.ghpm/`. If `.gitignore` doesn't exist, create it with `.ghpm/`.
 
-### Phase 6: Report
+### Phase 6: Install Agent Integration (optional)
 
-16. Print summary:
+16. Detect the current agent environment and offer to install hooks/rules for enhanced `ghpm-work` sessions. See `../ghpm-shared/references/integrations.md` for available integrations.
+
+    **Claude Code detection**: Check if `.claude/` directory exists or if the current process is running inside Claude Code.
+
+    If detected, ask the user:
+    ```
+    Detected Claude Code. Install session hooks for ghpm-work? (y/n)
+    Hooks add: auto session context injection, wrap-up on exit.
+    Without hooks, ghpm-work still works via explicit commands.
+    ```
+
+    If confirmed:
+    - Create `.claude/hooks.json` with the hooks defined in `../ghpm-shared/references/integrations.md`.
+    - If `.claude/hooks.json` already exists, merge ghpm hooks into the existing structure (preserve existing hooks, add new ones).
+
+    If declined or agent not detected, skip.
+
+### Phase 7: Report
+
+17. Print summary:
 
 ```
 ghpm initialized for <title> (<owner>/projects/<number>)
@@ -143,8 +167,9 @@ ghpm initialized for <title> (<owner>/projects/<number>)
   Repos:     <count>
   Items:     <count> cached
 
-Config:  .ghpm.json (gitignored, project-specific)
-Cache:   .ghpm-cache.json (gitignored)
+Config:  .ghpm/config.json (gitignored)
+Cache:   .ghpm/cache.json (gitignored)
+Hooks:   <installed|skipped>
 
 Run /ghpm-status for project overview.
 ```

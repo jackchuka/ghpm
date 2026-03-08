@@ -1,7 +1,7 @@
 ---
 name: ghpm-suggest
 description: "Suggest what to work on next based on project state and session context. Considers proximity, momentum, status, and constraints."
-allowed-tools: Bash(gh:*), Bash(git:*), Read, Write, Grep, Glob
+allowed-tools: Bash(gh:*), Bash(git:*), Read, Grep, Glob
 ---
 
 # ghpm-suggest
@@ -98,3 +98,4 @@ Suggested:
 - [ghpm-shared](../ghpm-shared/SKILL.md) — Prerequisites and error handling
 - [ghpm-status](../ghpm-status/SKILL.md) — Project health dashboard
 - [ghpm-view](../ghpm-view/SKILL.md) — Drill into a specific view
+- [ghpm-work](../ghpm-work/SKILL.md) — Start a work session on an issue

@@ -1,7 +1,7 @@
 ---
 name: ghpm-status
 description: "GitHub Project health dashboard. Shows workflow distribution, items needing attention, and available views."
-allowed-tools: Bash(gh:*), Read, Write, Grep
+allowed-tools: Bash(gh:*), Read, Grep
 ---
 
 # ghpm-status
@@ -13,7 +13,7 @@ Project health dashboard. Answers "how's the project doing?" at a glance.
 ## Arguments
 
 - `/ghpm-status` — full dashboard for the project
-- `/ghpm-status <scope>` — scoped to a team or component name (matched against field options in `.ghpm.json`)
+- `/ghpm-status <scope>` — scoped to a team or component name (matched against field options in `.ghpm/config.json`)
 
 ## Workflow
 
@@ -26,7 +26,7 @@ Follow the startup sequence in `../ghpm-shared/SKILL.md` and load cache per `../
 3. Count items by workflow column (using the `workflow.field` name from config to find the matching field on each item). Include a count for items with no status.
 
 4. If a scope argument was provided, filter items first:
-   - Match the argument against all field option names in `.ghpm.json` (case-insensitive).
+   - Match the argument against all field option names in `.ghpm/config.json` (case-insensitive).
    - Filter items to only those matching the scope before aggregating.
 
 5. Identify items needing attention:

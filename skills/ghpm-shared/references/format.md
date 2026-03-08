@@ -47,3 +47,4 @@ When suggesting the user run another skill, use the `/ghpm-<name>` format:
 - "Run `/ghpm-status` for project overview."
 - "Use `/ghpm-view <name>` to drill into a view."
 - "Run `/ghpm-init` to set up project tracking."
+- "Use `/ghpm-work <number>` to start a work session."

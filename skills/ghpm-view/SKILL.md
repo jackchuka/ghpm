@@ -1,7 +1,7 @@
 ---
 name: ghpm-view
 description: "Query GitHub Project items by named view or ad-hoc filter. Shows items in board, table, or roadmap format."
-allowed-tools: Bash(gh:*), Read, Write, Grep
+allowed-tools: Bash(gh:*), Read, Grep
 ---
 
 # ghpm-view
@@ -35,7 +35,7 @@ Follow the startup sequence in `../ghpm-shared/SKILL.md` and load cache per `../
    - If multiple views match: show matches and ask user to pick.
 
 6. If no view matches, treat input as ad-hoc filter:
-   - Match user's words against known field option names from `.ghpm.json`.
+   - Match user's words against known field option names from `.ghpm/config.json`.
    - Match `@username` against assignee fields.
    - Match workflow column names (e.g., "in progress" -> InProgress).
    - Build a filter from matched fields.
