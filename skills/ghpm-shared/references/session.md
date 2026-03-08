@@ -62,3 +62,7 @@ Delete `.ghpm/sessions/<number>.json` when the session ends (after wrap-up journ
 ```bash
 ls .ghpm/sessions/*.json 2>/dev/null
 ```
+
+## Detecting Stale Sessions
+
+A session is considered stale if `started_at` is more than 24 hours ago. The shared startup sequence checks for stale sessions and prompts the user to wrap up or discard them. This prevents orphaned sessions from accumulating when Claude exits unexpectedly or the user closes the terminal mid-session.

@@ -97,9 +97,19 @@ Follow the startup sequence in `../ghpm-shared/SKILL.md` and load cache per `../
 
 - Group by the sort field (typically Quarter or iteration).
 
-**Ad-hoc filter** — always use table layout.
+**Ad-hoc filter** — always use table layout. Include a summary header showing total project items matched and what the filter resolved to:
 
-10. If more than 30 items, show first 30 and note: "Showing 30 of <total>. Narrow your filter to see more."
+```
+Ad-hoc filter: <resolved filter> — <count> items (of <total> in project)
+
+| # | Title | Assignee | Component | Status |
+|---|-------|----------|-----------|--------|
+| 1 | ...   | ...      | ...       | ...    |
+```
+
+If zero items match, explain why (e.g., the user doesn't exist, or no items match the status) and include helpful context: the total number of items in the project with that status, and a list of valid values for the field that didn't match. Suggest an alternative query using `/ghpm-view`.
+
+10. If more than 30 items **total** (across all columns/groups), show only the first 30 items total and note: "Showing 30 of <total>. Narrow your filter to see more." For board layout, this means distributing the 30-item budget across columns proportionally — don't show all items in every column. For example, with 119 items across 4 columns, you might show ~8 per column rather than listing all 42 Planned items.
 
 ## Tips
 

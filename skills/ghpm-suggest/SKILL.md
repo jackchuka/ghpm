@@ -65,7 +65,9 @@ The following is auto-injected at invocation time. If any value is empty, that c
 
 ### Phase 3: Present Suggestions
 
-8. Format per conventions in `../ghpm-shared/references/format.md`:
+8. Format per conventions in `../ghpm-shared/references/format.md`. Present suggestions in tiers — a top recommendation, strong alternatives, and optionally a "change of pace" option. The exact count is flexible (3-5 is typical), but every suggestion should earn its place.
+
+For each suggestion, explain **why now** — what makes this the right item at this moment. Be specific: mention deadlines, recent momentum, blocking relationships, or team context. Also explain how it **fits the constraint** (e.g., "2-hour fit: migrate a batch of test files, each is self-contained").
 
 ```
 Based on your context:
@@ -73,16 +75,35 @@ Based on your context:
   Recent work: <summary of recent commits>
   <component/team> affinity: <inferred from context>
 
-Suggested:
+## Top Recommendation
 
-1. #<num> "<title>" (<status>, <size>)
-   <1-2 sentences explaining why this makes sense>
+### 1. <title>
+- **Issue:** <repo>#<num>
+- **URL:** <github url>
+- **Status:** <status>
+- **Why now:** <specific reasoning — deadlines, momentum, blocking, team needs>
+- **<constraint> fit:** <how this fits the user's time/energy/focus constraint>
 
-2. #<num> "<title>" (<status>, <size>)
-   <1-2 sentences explaining why>
+## Strong Alternatives
 
-3. #<num> "<title>" (<status>, <size>)
-   <1-2 sentences explaining why>
+### 2. <title>
+...
+
+### 3. <title>
+...
+
+## If You Want a Change of Pace
+
+### 4. <title>
+- (optional tier for lower-priority or different-domain options)
+```
+
+Include a summary table at the end for quick scanning:
+
+```
+| Priority | Issue | Status | Rationale |
+|----------|-------|--------|-----------|
+| 1 | ... | ... | one-line why |
 ```
 
 - Include issue URL for easy navigation.

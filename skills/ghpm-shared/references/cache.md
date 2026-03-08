@@ -5,7 +5,8 @@
 1. Read `.ghpm/cache.json` from the current directory.
 2. Check `fetched_at` against `ttl_minutes` to determine freshness.
    - **Fresh** (within TTL): use cached items directly.
-   - **Stale or missing**: re-fetch (see below).
+   - **Stale or missing**: automatically re-fetch (see below) — no user prompt needed.
+   - **Re-fetch fails**: if a stale cache exists, use it as fallback and note the age inline (e.g., "Using cached data from 2 hours ago"). If no cache exists at all, stop with an error.
 
 ## Re-fetching
 

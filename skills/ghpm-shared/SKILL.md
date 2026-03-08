@@ -31,7 +31,15 @@ If `.ghpm/config.json` is missing, tell the user to run `/ghpm-init` first and s
 Every skill that reads project data should follow this sequence:
 
 1. Read `.ghpm/config.json` from the current directory. If missing, stop with init guidance (above).
-2. Load cache following `references/cache.md`. If `gh` commands fail, follow the error handling guidance there — offer stale cache as fallback when available.
+2. Load cache following `references/cache.md`. If the cache is stale or missing, **automatically re-fetch** — no user prompt needed. If the re-fetch fails (network error, rate limit), fall back to the stale cache if available and note the age inline (e.g., "Using cached data from 2 hours ago").
+3. Check for stale sessions: list `.ghpm/sessions/*.json`. For each session file, read `started_at` and compare to now. If a session is older than 24 hours, prompt the user:
+   ```
+   Found stale session for #<num> "<title>" (started <N> days ago).
+   Wrap up and post journal, or discard?
+   ```
+   - **Wrap up**: follow the wrap-up sequence from `ghpm-work` (gather git context, post journal, clear session).
+   - **Discard**: delete the session file silently.
+   - If the user declines both, leave it and continue — don't block the current skill.
 
 ## Error Handling
 
