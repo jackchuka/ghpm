@@ -48,10 +48,11 @@ Every skill that reads project data should follow this sequence:
 - **Network error**: if cache exists (even stale), offer to use stale cache as fallback.
 - **Permission denied** (HTTP 403/404 on project): tell the user to check token scopes (`read:project`, `project`).
 
-## Write Operations
+## Write Operations & Prompts
 
-> [!CAUTION]
-> Skills that modify project items (move status, assign, create, delete) are **write** commands. Always confirm with the user before executing.
+Skills that modify project items are **write** operations. Whether to confirm with the user is controlled by `prompts` config — see `references/prompts.md` for resolution logic.
+
+Default behavior (no config): always prompt.
 
 ## Agent Integrations
 

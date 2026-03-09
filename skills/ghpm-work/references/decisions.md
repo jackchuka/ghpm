@@ -28,12 +28,7 @@ Examples of decisions hiding inside plans:
 
 ## When detected
 
-Nudge:
-```
-Decision detected. Record to #<num>?
-  > "<proposed summary>"
-(y/n)
-```
+> **Prompt** (`record_decision`): "Decision detected. Record to #\<num\>?\n  > \"\<proposed summary\>\"\n(y/n)"
 
 User can also trigger: `decide: <text>` or just `decide`.
 

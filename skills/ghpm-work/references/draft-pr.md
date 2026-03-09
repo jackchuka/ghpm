@@ -4,7 +4,11 @@
 
 ## Steps
 
-1. **Create a draft PR**:
+1. **Draft the PR content** (title, summary, changes, test plan).
+
+   > **Prompt** (`draft_pr`): Show the PR title and body, ask "Create this draft PR? (y/n)" — iterate on feedback until approved.
+
+2. **Create the draft PR**:
    ```bash
    gh pr create --draft \
      --title "<issue title>" \
@@ -26,7 +30,7 @@
    - Use the current repo (from `git remote get-url origin`), not the planning repo.
    - Use `Closes <content.repository>#<number>` (fully qualified) for cross-repo linking.
 
-2. **Print final summary**:
+3. **Print final summary**:
    ```
    Work complete for #<num> "<title>"
 

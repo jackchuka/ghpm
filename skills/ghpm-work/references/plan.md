@@ -12,7 +12,7 @@
    - Approach and alternatives considered
    - Risks or open questions
 
-   Show to user for feedback. Iterate until approved.
+   > **Prompt** (`post_plan`): Show the plan and ask "Post this plan to #\<num\>? (y/n)" — iterate on feedback until approved.
 
 3. **Post plan as issue comment**:
    ```bash
@@ -25,4 +25,3 @@
    ```
 
 4. **Extract decisions from the plan**. Review the approved plan and identify distinct design choices (see `decisions.md` — "Plans contain decisions"). Nudge for each one.
-

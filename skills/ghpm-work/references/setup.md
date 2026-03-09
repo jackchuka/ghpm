@@ -46,7 +46,7 @@
      }) { projectV2Item { id } }
    }'
    ```
-   > **Write operation**: Confirm before executing.
+   > **Prompt** (`status_sync`): "Update status to InProgress? (y/n)"
 
    Update cached `status` in `.ghpm/cache.json`.
 

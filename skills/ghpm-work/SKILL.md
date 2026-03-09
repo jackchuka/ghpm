@@ -50,6 +50,12 @@ Each phase writes its `phase` value to the session file **on entry, before doing
 
 On resume, briefly show what's already done before continuing.
 
+## Prompt Configuration
+
+Per `../ghpm-shared/references/prompts.md`. This skill's config lives at `prompts.ghpm-work` in `.ghpm/config.json`.
+
+Action keys: `status_sync`, `clarify_issue`, `post_plan`, `post_impl_plan`, `draft_pr`, `record_decision`.
+
 ## Rules
 
 - Each phase updates `"phase"` in the session file **on entry, before doing any work**. This is critical for crash recovery.

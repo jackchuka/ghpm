@@ -10,7 +10,7 @@
    - Test strategy (what to test, how)
    - Order of operations (dependencies between steps)
 
-   Show to user for feedback. Iterate until approved.
+   > **Prompt** (`post_impl_plan`): Show the implementation plan and ask "Post this to #\<num\>? (y/n)" — iterate on feedback until approved.
 
 2. **Post implementation plan as issue comment**:
    ```bash

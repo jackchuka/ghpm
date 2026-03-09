@@ -16,16 +16,17 @@
 
    If clear and actionable, say so and move on.
 
-   If it needs work, show what's unclear and offer to improve:
-   ```
-   Issue #<num> needs clarification:
-   - <what's missing or vague>
+   If it needs work, show what's unclear:
 
-   Want me to flesh it out? (y/n)
-   ```
-   If yes, draft an improved body preserving original intent. Add structure (context, scope, action items). Show draft, confirm, then:
+   > **Prompt** (`clarify_issue`): "Issue #\<num\> needs clarification: \<what's missing\>. Want me to flesh it out? (y/n)"
+
+   If yes, draft an improved body preserving original intent. Add structure (context, scope, action items).
+
+   > **Prompt** (`clarify_issue`): Show the draft body and ask "Update the issue with this? (y/n)"
+
+   If approved:
    ```bash
    gh issue edit <number> -R <content.repository> --body "<improved body>"
    ```
 
-3. **Ask the user** if they have additional context or constraints not captured in the issue.
+3. > **Prompt**: "Any additional context or constraints not in the issue?"

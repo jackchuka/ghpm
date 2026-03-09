@@ -23,7 +23,7 @@ This creates a `.ghpm/` directory (gitignored):
 ├── config.json              # project config (fields, views, conventions)
 ├── cache.json               # cached project items
 └── sessions/
-    └── <number>.json        # active work session per issue
+    └── <number>.json        # work session per issue (kept after completion)
 ```
 
 ## Skills
@@ -38,29 +38,36 @@ ghpm-work <issue-number>     # full work lifecycle (see below)
 
 ## ghpm-work: Full Lifecycle
 
-`ghpm-work` drives an issue from pickup to PR:
+`ghpm-work` drives an issue from pickup to PR. Each phase prompts before taking action — configurable per action.
 
 ```
  1. Setup           assign, branch, status → InProgress
-      │
+      │              → status_sync
  2. Clarify         evaluate issue, flesh out if vague
-      │
- 3. Plan            explore codebase, draft approach → post to issue
-      │
- 4. Impl Plan       concrete steps, files, tests → post to issue
-      │
+      │              → clarify_issue
+ 3. Plan            explore codebase, draft approach
+      │              → post_plan
+ 4. Impl Plan       concrete steps, files, tests
+      │              → post_impl_plan
  5. Implement       write code, commit, verify
       │
  6. Draft PR        create draft PR linking the issue
+      │              → draft_pr
       │
-      ╰── decisions captured and posted at every phase
+      ╰── decisions detected and posted at every phase
+                     → record_decision
 ```
 
-Sessions are saved to `.ghpm/sessions/<number>.json` with the current phase. Restarting Claude resumes from where you left off.
+- Sessions track phase in `.ghpm/sessions/<number>.json` — restarting resumes from where you left off.
+- Decisions are posted as issue comments (single source of truth).
+- Plans contain decisions — key design choices are extracted and recorded after each plan is posted.
+- Completed sessions are marked `"phase": "done"`, not deleted.
 
-## Conventions
+## Configuration
 
-The `conventions` block in `.ghpm/config.json` controls behavior with natural language rules:
+### Conventions
+
+The `conventions` block controls behavior with natural language rules:
 
 ```json
 {
@@ -72,12 +79,36 @@ The `conventions` block in `.ghpm/config.json` controls behavior with natural la
 }
 ```
 
+### Prompts
+
+The `prompts` block controls which actions ask for confirmation, scoped per skill:
+
+```json
+{
+  "prompts": {
+    "default": "prompt",
+    "ghpm-work": {
+      "default": "auto",
+      "draft_pr": "prompt"
+    }
+  }
+}
+```
+
+| Value | Behavior |
+|-------|----------|
+| `"prompt"` | Ask the user before proceeding |
+| `"auto"` | Proceed without asking |
+| `"skip"` | Skip the action entirely |
+
+Resolution: `prompts.<skill>.<action>` → `prompts.<skill>.default` → `prompts.default` → `"prompt"`. First match wins.
+
 ## Agent Integrations
 
 `ghpm-init` auto-detects your agent and offers to install hooks:
 
 | Agent | Enhancement | What it does |
 |-------|------------|-------------|
-| Claude Code | `.claude/hooks.json` | Session context on every turn, wrap-up on exit |
+| Claude Code | `.claude/hooks.json` | Session context + phase on every turn, wrap-up on exit |
 
 Without hooks, everything works via explicit triggers: `decide: <text>` for decisions, "wrap up" for session end.
