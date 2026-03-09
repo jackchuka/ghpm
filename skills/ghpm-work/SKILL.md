@@ -26,7 +26,7 @@ If no argument, ask the user for the issue number.
    ```
    Resuming session for #<num> "<title>" on branch <branch>
    ```
-   Check out the existing branch and skip to Phase 4 (step 12).
+   Check out the existing branch and skip to Phase 6 (step 16).
 
 3. **Load cache** per `../ghpm-shared/references/cache.md`.
 
@@ -94,17 +94,41 @@ If no argument, ask the user for the issue number.
         "url": "<issue URL>"
       },
       "branch": "<branch-name>",
-      "started_at": "<ISO8601 timestamp>",
+      "started_at": "<ISO8601 timestamp with full date and time, e.g. 2026-03-09T12:34:56Z — use the actual current time, never midnight>",
       "decisions": []
     }
     ```
 
-14. **Print summary**:
+### Phase 5: Draft PR & Issue Update
+
+14. **Offer to create a draft PR**. Ask the user:
+    ```
+    Create a draft PR for #<num>? (y/n)
+    ```
+    If yes:
+    ```bash
+    gh pr create --draft --title "<issue title>" --body "Closes #<number>" -R <current repo> --head <branch>
+    ```
+    Use the current repo (from `git remote get-url origin`), not the item's planning repo. If the current repo differs from `content.repository`, this is expected — the issue tracks planning, the PR tracks code.
+
+15. **Offer to update the issue** with a working-on comment. Ask the user:
+    ```
+    Post a comment to #<num> linking this branch? (y/n)
+    ```
+    If yes:
+    ```bash
+    gh issue comment <number> -R <content.repository> --body "Started working on this in \`<branch>\` ([<current-repo>](https://github.com/<current-repo>))"
+    ```
+
+### Phase 6: Summary
+
+16. **Print summary**:
     ```
     Started session for #<num> "<title>"
 
       Branch:  <type>/<issue-number>/<slug>
       Status:  <old> → <new>
+      PR:      <draft PR url> (or "skipped")
       Issue:   <url>
 
     I'll nudge you when I detect a design decision.
@@ -115,13 +139,13 @@ If no argument, ask the user for the issue number.
 
 If agent-specific hooks are installed (see `../ghpm-shared/references/integrations.md`), session context is injected into every message automatically — this ensures decision detection survives context compression. Without hooks, the skill still works via explicit triggers below.
 
-Watch the conversation for design decision moments. Signals include:
+Watch the conversation for design decision moments. A decision is any choice that shapes how the system works and would be useful to remember later. Signals include:
 
-- "Let's go with X"
-- "I chose X because Y"
-- "We'll use X instead of Y"
-- "The approach is X"
-- Selecting between alternatives after discussion
+- **Explicit choices**: "Let's go with X", "I chose X because Y", "We'll use X instead of Y"
+- **Behavioral/API design**: deciding what a flag does, what happens on error, default behavior, destructive vs safe defaults (e.g., "--force deletes existing files")
+- **Architecture**: choosing a pattern, data model, directory structure, naming convention
+- **Trade-offs**: accepting a limitation, choosing simplicity over completeness, scoping down
+- **Selecting between alternatives** after discussion, even if brief
 
 When detected, nudge:
 

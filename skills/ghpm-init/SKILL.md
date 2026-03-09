@@ -134,7 +134,7 @@ gh api graphql -f query='
 
 14. Write `.ghpm/cache.json` per `../ghpm-shared/references/cache.md`.
 
-15. Run `mkdir -p .ghpm/sessions`. Check if `.gitignore` exists. If it does, check if `.ghpm/` is already listed. If not, append `.ghpm/`. If `.gitignore` doesn't exist, create it with `.ghpm/`.
+15. Run `mkdir -p .ghpm/sessions`. Check if `.gitignore` exists. If it does, check if `.ghpm/` is already listed. If not, ensure the file ends with a newline before appending `.ghpm/` on its own line. If `.gitignore` doesn't exist, create it with `.ghpm/\n`.
 
 ### Phase 6: Install Agent Integration (optional)
 
