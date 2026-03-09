@@ -1,8 +1,8 @@
 # ghpm
 
-Agent skills for managing GitHub Projects v2.
+Agent skills for managing GitHub Projects v2 — from triage to merged PR.
 
-Query project status, browse views, and get work suggestions — all through natural language. Works with any AI coding agent that supports skills (Claude Code, etc.).
+Works with any AI coding agent that supports skills (Claude Code, etc.).
 
 ## Prerequisites
 
@@ -12,51 +12,55 @@ Query project status, browse views, and get work suggestions — all through nat
 
 ## Setup
 
-1. Clone or copy this repo into your project directory.
-2. Run `ghpm-init` with your project URL:
-
 ```
 ghpm-init https://github.com/orgs/<org>/projects/<number>
 ```
 
-This generates a `.ghpm/` directory:
+This creates a `.ghpm/` directory (gitignored):
 
-| File                           | Purpose                               |
-| ------------------------------ | ------------------------------------- |
-| `.ghpm/config.json`            | Project config (fields, views, repos) |
-| `.ghpm/cache.json`             | Cached project items                  |
-| `.ghpm/sessions/<number>.json` | Active work sessions (per issue)      |
-
-The entire `.ghpm/` directory is gitignored.
+```
+.ghpm/
+├── config.json              # project config (fields, views, conventions)
+├── cache.json               # cached project items
+└── sessions/
+    └── <number>.json        # active work session per issue
+```
 
 ## Skills
 
-| Skill              | Description                                                               |
-| ------------------ | ------------------------------------------------------------------------- |
-| `ghpm-init`        | Initialize config from a GitHub Projects v2 project                       |
-| `ghpm-status`      | Project health dashboard — workflow distribution, items needing attention |
-| `ghpm-view <name>` | Query items by named view or ad-hoc filter                                |
-| `ghpm-suggest`     | Context-aware work recommendations based on project state and session     |
-| `ghpm-work <num>` | Start a work session — branch, status sync, decision capture, session journal |
+```
+ghpm-init <url>              # initialize project config
+ghpm-status [team]           # project health dashboard
+ghpm-view <name|filter>      # query items by view or ad-hoc filter
+ghpm-suggest [constraint]    # what should I work on next?
+ghpm-work <issue-number>     # full work lifecycle (see below)
+```
 
-## Usage
+## ghpm-work: Full Lifecycle
+
+`ghpm-work` drives an issue from pickup to PR:
 
 ```
-ghpm-status              # project overview
-ghpm-status Backend      # scoped to Backend team
-ghpm-view triage         # show Task Triage view
-ghpm-view component:docs # ad-hoc filter
-ghpm-suggest             # what should I work on next?
-ghpm-suggest something small  # time-constrained suggestion
-ghpm-work 772            # start session on issue #772
-                         # creates branch, sets InProgress
-                         # decisions auto-detected and posted
-                         # session journal posted on wrap-up
+ 1. Setup           assign, branch, status → InProgress
+      │
+ 2. Clarify         evaluate issue, flesh out if vague
+      │
+ 3. Plan            explore codebase, draft approach → post to issue
+      │
+ 4. Impl Plan       concrete steps, files, tests → post to issue
+      │
+ 5. Implement       write code, commit, verify
+      │
+ 6. Draft PR        create draft PR linking the issue
+      │
+      ╰── decisions captured and posted at every phase
 ```
+
+Sessions are saved to `.ghpm/sessions/<number>.json` with the current phase. Restarting Claude resumes from where you left off.
 
 ## Conventions
 
-The `conventions` block in `.ghpm/config.json` controls branch naming, status sync, and decision behavior using natural language rules:
+The `conventions` block in `.ghpm/config.json` controls behavior with natural language rules:
 
 ```json
 {
@@ -68,15 +72,12 @@ The `conventions` block in `.ghpm/config.json` controls branch naming, status sy
 }
 ```
 
-Edit these rules in plain English to customize behavior.
-
 ## Agent Integrations
 
-ghpm skills work with any AI coding agent. For agents that support hooks or rules, `ghpm-init` auto-detects the environment and offers to install enhancements:
+`ghpm-init` auto-detects your agent and offers to install hooks:
 
 | Agent | Enhancement | What it does |
 |-------|------------|-------------|
-| Claude Code | `.claude/hooks.json` | Auto-injects session context, triggers wrap-up on exit |
-| Others | Coming soon | Core skills work everywhere via explicit commands |
+| Claude Code | `.claude/hooks.json` | Session context on every turn, wrap-up on exit |
 
-Without hooks, `ghpm-work` works via explicit triggers: `decide: <text>` for decisions, "wrap up" for session end.
+Without hooks, everything works via explicit triggers: `decide: <text>` for decisions, "wrap up" for session end.
