@@ -1,5 +1,7 @@
 # Phase 5: Implement
 
+> **FIRST**: Update `.ghpm/sessions/<number>.json` → `"phase": "implement"` before doing anything else.
+
 ## Steps
 
 1. **Execute the implementation plan**. Work through each step:
@@ -12,4 +14,3 @@
    - Check implementation matches the plan
    - Confirm no regressions
 
-3. Update session: `"phase": "implement"`.

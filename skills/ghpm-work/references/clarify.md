@@ -1,5 +1,7 @@
 # Phase 2: Clarify
 
+> **FIRST**: Update `.ghpm/sessions/<number>.json` → `"phase": "clarify"` before doing anything else.
+
 ## Steps
 
 1. **Fetch the full issue**:
@@ -27,5 +29,3 @@
    ```
 
 3. **Ask the user** if they have additional context or constraints not captured in the issue.
-
-4. Update session: `"phase": "clarify"`.

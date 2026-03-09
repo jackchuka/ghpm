@@ -34,22 +34,24 @@ Setup → Clarify → Plan → Implementation Plan → Implement → Draft PR
 
 ## Session Resume
 
-Sessions track `phase` in `.ghpm/sessions/<number>.json` (schema in `../ghpm-shared/references/session.md`). On resume, continue from last recorded phase:
+Sessions track `phase` in `.ghpm/sessions/<number>.json` (schema in `../ghpm-shared/references/session.md`).
+
+Each phase writes its `phase` value to the session file **on entry, before doing any work**. This means on resume, re-run the recorded phase (it may have been interrupted):
 
 | `phase` | Resume from |
 |---------|-------------|
-| `setup` | Clarify |
-| `clarify` | Plan |
-| `plan` | Implementation Plan |
-| `implementation_plan` | Implement |
-| `implement` | Draft PR |
-| `pr` | Print summary |
+| missing/`setup` | Clarify (setup completed, phase field not yet added) |
+| `clarify` | Clarify |
+| `plan` | Plan |
+| `implementation_plan` | Implementation Plan |
+| `implement` | Implement |
+| `pr` | Draft PR |
 
 On resume, briefly show what's already done before continuing.
 
 ## Rules
 
-- Each phase updates `"phase"` in the session file before moving on.
+- Each phase updates `"phase"` in the session file **on entry, before doing any work**. This is critical for crash recovery.
 - The user can say "skip" to skip any phase.
 - Multiple sessions can run in parallel on different branches.
 - Restarting Claude on the same branch auto-resumes via session detection.

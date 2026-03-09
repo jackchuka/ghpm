@@ -1,5 +1,7 @@
 # Phase 4: Implementation Plan
 
+> **FIRST**: Update `.ghpm/sessions/<number>.json` → `"phase": "implementation_plan"` before doing anything else.
+
 ## Steps
 
 1. **Draft an implementation plan** — concrete, ordered steps:
@@ -20,4 +22,3 @@
    )"
    ```
 
-3. Update session: `"phase": "implementation_plan"`.

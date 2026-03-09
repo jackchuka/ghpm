@@ -1,5 +1,7 @@
 # Phase 3: Plan
 
+> **FIRST**: Update `.ghpm/sessions/<number>.json` → `"phase": "plan"` before doing anything else.
+
 ## Steps
 
 1. **Explore the codebase** to understand the current state relevant to the issue. Read key files, search for related code, understand existing patterns.
@@ -22,4 +24,3 @@
    )"
    ```
 
-4. Update session: `"phase": "plan"`.

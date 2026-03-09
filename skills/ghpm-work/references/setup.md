@@ -4,7 +4,11 @@
 
 1. **Project config**: Follow startup sequence in `../../ghpm-shared/SKILL.md`.
 
-2. **Check for existing session**: Read `.ghpm/sessions/<issue-number>.json` per `../../ghpm-shared/references/session.md`. If exists, resume from recorded `phase` (see resume table in SKILL.md).
+2. **Check for existing session**: Read `.ghpm/sessions/<issue-number>.json` per `../../ghpm-shared/references/session.md`. If exists:
+   - Check out the existing branch.
+   - Read `phase` from the session file. If `phase` is missing (legacy session), treat as `"setup"` — all setup steps already happened, so resume from Clarify.
+   - Resume from the next phase per the resume table in SKILL.md.
+   - Briefly show what's already done (branch, status, etc.) before continuing.
 
 3. **Load cache** per `../../ghpm-shared/references/cache.md`.
 

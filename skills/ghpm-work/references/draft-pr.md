@@ -1,5 +1,7 @@
 # Phase 6: Draft PR
 
+> **FIRST**: Update `.ghpm/sessions/<number>.json` → `"phase": "pr"` before doing anything else.
+
 ## Steps
 
 1. **Create a draft PR**:
@@ -24,9 +26,7 @@
    - Use the current repo (from `git remote get-url origin`), not the planning repo.
    - Use `Closes <content.repository>#<number>` (fully qualified) for cross-repo linking.
 
-2. Update session: `"phase": "pr"`.
-
-3. **Print final summary**:
+2. **Print final summary**:
    ```
    Work complete for #<num> "<title>"
 
