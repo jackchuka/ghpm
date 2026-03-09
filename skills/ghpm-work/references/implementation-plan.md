@@ -22,3 +22,5 @@
    )"
    ```
 
+3. **Extract decisions from the implementation plan**. Review the approved plan for any new design choices not already captured in Phase 3 (see `decisions.md` — "Plans contain decisions"). Nudge for each one.
+

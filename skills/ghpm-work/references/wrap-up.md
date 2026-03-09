@@ -17,7 +17,12 @@ Triggered by "wrap up", "done", or agent hooks (see `../../ghpm-shared/reference
    gh pr list --head <branch> -R <repo> --json number,merged,url --limit 1
    ```
 
-4. **Compose session journal**:
+4. **Gather decisions** from issue comments (the single source of truth):
+   ```bash
+   gh issue view <number> -R <repo> --json comments --jq '.comments[].body' | grep '^**Decision:**'
+   ```
+
+5. **Compose session journal**:
    ```
    **Session journal** — <date>
 
@@ -33,16 +38,16 @@ Triggered by "wrap up", "done", or agent hooks (see `../../ghpm-shared/reference
    **Status:** <current status> (PR: <merged|open|draft|not created>)
    ```
 
-5. **Post journal as issue comment**:
+6. **Post journal as issue comment**:
    ```bash
    gh issue comment <number> -R <repo> --body "<journal>"
    ```
 
-6. **Status sync**: If PR is merged and `conventions.status_sync` says to transition to Done, update status.
+7. **Status sync**: If PR is merged and `conventions.status_sync` says to transition to Done, update status.
 
-7. **Clear session**: Delete `.ghpm/sessions/<number>.json`.
+8. **Mark session done**: Update `.ghpm/sessions/<number>.json` → `"phase": "done"`. Do NOT delete the file.
 
-8. **Print**:
+9. **Print**:
    ```
    Session ended for #<num> "<title>"
      Commits: <N>

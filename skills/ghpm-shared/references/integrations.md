@@ -26,7 +26,7 @@ Install to `.claude/hooks.json` in the project root. If the file already exists,
         "hooks": [
           {
             "type": "command",
-            "command": "branch=$(git branch --show-current 2>/dev/null); num=$(echo \"$branch\" | sed -n 's|[^/]*/\\([0-9]*\\)/.*|\\1|p'); if [ -n \"$num\" ] && [ -f \".ghpm/sessions/${num}.json\" ]; then title=$(grep -o '\"title\": *\"[^\"]*\"' \".ghpm/sessions/${num}.json\" | head -1 | sed 's/\"title\": *\"//;s/\"$//'); echo \"GHPM session active: #${num} \\\"${title}\\\". If the user makes any choice about how the system should behave (flags, defaults, architecture, naming, trade-offs), nudge to record it as a decision.\"; fi"
+            "command": "branch=$(git branch --show-current 2>/dev/null); num=$(echo \"$branch\" | sed -n 's|[^/]*/\\([0-9]*\\)/.*|\\1|p'); if [ -n \"$num\" ] && [ -f \".ghpm/sessions/${num}.json\" ]; then title=$(grep -o '\"title\": *\"[^\"]*\"' \".ghpm/sessions/${num}.json\" | head -1 | sed 's/\"title\": *\"//;s/\"$//'); phase=$(grep -o '\"phase\": *\"[^\"]*\"' \".ghpm/sessions/${num}.json\" | head -1 | sed 's/\"phase\": *\"//;s/\"$//'); echo \"GHPM #${num} \\\"${title}\\\" [phase: ${phase:-setup}]. Record any choice about behavior, architecture, naming, rules, or trade-offs as a decision. Plans contain decisions — extract them after posting.\"; fi"
           }
         ]
       }

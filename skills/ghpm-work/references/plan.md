@@ -24,3 +24,5 @@
    )"
    ```
 
+4. **Extract decisions from the plan**. Review the approved plan and identify distinct design choices (see `decisions.md` — "Plans contain decisions"). Nudge for each one.
+

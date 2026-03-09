@@ -33,6 +33,5 @@
      Branch:    <branch>
      PR:        <PR url>
      Commits:   <N>
-     Decisions: <N> recorded
      Issue:     <url>
    ```

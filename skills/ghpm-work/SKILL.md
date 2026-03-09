@@ -46,6 +46,7 @@ Each phase writes its `phase` value to the session file **on entry, before doing
 | `implementation_plan` | Implementation Plan |
 | `implement` | Implement |
 | `pr` | Draft PR |
+| `done` | Session complete — inform user and stop |
 
 On resume, briefly show what's already done before continuing.
 
