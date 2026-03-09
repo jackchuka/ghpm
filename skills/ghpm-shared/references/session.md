@@ -16,7 +16,8 @@ Each active work session is stored in `.ghpm/sessions/<issue-number>.json`. One 
     "url": "<issue URL>"
   },
   "branch": "<branch name>",
-  "started_at": "<ISO8601 timestamp>",
+  "started_at": "<ISO8601 timestamp with actual time, e.g. 2026-03-09T12:34:56Z>",
+  "phase": "<setup|clarify|plan|implementation_plan|implement|pr>",
   "decisions": [
     {
       "text": "<decision text>",
