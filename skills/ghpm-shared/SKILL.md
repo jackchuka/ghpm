@@ -1,7 +1,6 @@
 ---
 name: ghpm-shared
 description: "Shared reference for all ghpm skills — prerequisites, config format, startup sequence, and error handling."
-allowed-tools: Bash(gh:*), Read, Grep
 ---
 
 # ghpm — Shared Reference

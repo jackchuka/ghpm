@@ -1,6 +1,7 @@
 ---
 name: ghpm-work
-description: "End-to-end work session on a GitHub Project item. Setup → Clarify → Plan → Implement → PR, with decisions captured throughout."
+description: "End-to-end work session on a GitHub Project item. Setup → Clarify → Plan → Implement → PR, with decisions captured throughout. Use when starting work on an issue, picking up a task, or resuming an interrupted session."
+argument-hint: "<issue-number>"
 allowed-tools: Bash(gh:*), Bash(git:*), Read, Write, Edit, Grep, Glob
 ---
 
@@ -30,7 +31,7 @@ Setup → Clarify → Plan → Implementation Plan → Implement → Draft PR
 
 **Decisions**: See `references/decisions.md`. Capture at ANY phase — not just coding. Watch every interaction for choices worth recording.
 
-**Wrap up**: See `references/wrap-up.md`. Triggered by "wrap up", "done", or agent hooks.
+**Wrap up**: See `references/wrap-up.md`. Triggered by "wrap up" or "done".
 
 ## Session Resume
 
