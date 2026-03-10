@@ -115,6 +115,6 @@ Resolution: `prompts.<skill>.<action>` → `prompts.<skill>.default` → `prompt
 
 | Agent       | Enhancement                           | What it does                                                   |
 | ----------- | ------------------------------------- | -------------------------------------------------------------- |
-| Claude Code | `.claude/settings.json` (`hooks` key) | Session context + phase on every turn, stale session detection |
+| Claude Code | `.claude/settings.local.json` (`hooks` key) | Session context + phase on every turn, stale session detection |
 
 Without hooks, everything works via explicit triggers: `decide: <text>` for decisions, "wrap up" for session end.

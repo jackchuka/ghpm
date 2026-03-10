@@ -151,8 +151,8 @@ gh api graphql -f query='
     ```
 
     If confirmed:
-    - Add the hooks from `../ghpm-shared/references/integrations.md` into `.claude/settings.json` under the `"hooks"` key.
-    - If `.claude/settings.json` already exists, merge the `"hooks"` key into the existing structure (preserve existing settings and hooks, add new ones).
+    - Add the hooks from `../ghpm-shared/references/integrations.md` into `.claude/settings.local.json` under the `"hooks"` key.
+    - If `.claude/settings.local.json` already exists, merge the `"hooks"` key into the existing structure (preserve existing settings and hooks, add new ones).
 
     If declined or agent not detected, skip.
 

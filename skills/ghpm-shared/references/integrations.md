@@ -15,7 +15,7 @@ Claude Code supports hooks that inject session context automatically.
 
 ### Hook
 
-Install to `.claude/settings.json` in the project root under the `"hooks"` key. If the file already exists, merge the `"hooks"` key into the existing structure (preserve existing settings and hooks, add new ones).
+Install to `.claude/settings.local.json` in the project root under the `"hooks"` key. This keeps hooks local (not committed to the repo) since session files in `.ghpm/` are also local. If the file already exists, merge the `"hooks"` key into the existing structure (preserve existing settings and hooks, add new ones).
 
 ```json
 {
