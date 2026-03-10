@@ -4,6 +4,12 @@ Agent skills for managing GitHub Projects v2 — from triage to merged PR.
 
 Works with any AI coding agent that supports skills (Claude Code, etc.).
 
+## Install
+
+```bash
+npx skills add jackchuka/ghpm
+```
+
 ## Prerequisites
 
 - [`gh` CLI](https://cli.github.com/) installed and authenticated
