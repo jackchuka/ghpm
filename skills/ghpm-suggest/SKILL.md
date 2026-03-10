@@ -1,6 +1,7 @@
 ---
 name: ghpm-suggest
 description: "Suggest what to work on next based on project state and session context. Considers proximity, momentum, status, and constraints."
+argument-hint: "[any natural language constraint, e.g. 'I have 2 hours', 'I want to switch context', 'something small']"
 allowed-tools: Bash(gh:*), Bash(git:*), Read, Grep, Glob
 ---
 
@@ -48,7 +49,7 @@ The following is auto-injected at invocation time. If any value is empty, that c
 
 ### Phase 2: Reason and Suggest
 
-6. With all context assembled, reason about what to suggest. Consider:
+5. With all context assembled, reason about what to suggest. Consider:
    - **Proximity**: items in the same repo/component as current work require less context-switching.
    - **Momentum**: items related to recently completed work — the user has warm context.
    - **Status**: ReadyForDev items are higher priority than Planned (already vetted).
@@ -57,7 +58,7 @@ The following is auto-injected at invocation time. If any value is empty, that c
    - **Breadth**: if the user wants to switch context, suggest items in different components.
    - **Assignee**: prefer items already assigned to the user, then unassigned items.
 
-7. User constraints from arguments adjust the reasoning:
+6. User constraints from arguments adjust the reasoning:
    - "2 hours" / "something small" → prefer XS/S sized items
    - "switch context" → prefer items in DIFFERENT components than recent work
    - "<component name>" → filter to that component
@@ -65,7 +66,7 @@ The following is auto-injected at invocation time. If any value is empty, that c
 
 ### Phase 3: Present Suggestions
 
-8. Format per conventions in `../ghpm-shared/references/format.md`. Present suggestions in tiers — a top recommendation, strong alternatives, and optionally a "change of pace" option. The exact count is flexible (3-5 is typical), but every suggestion should earn its place.
+7. Format per conventions in `../ghpm-shared/references/format.md`. Present suggestions in tiers — a top recommendation, strong alternatives, and optionally a "change of pace" option. The exact count is flexible (3-5 is typical), but every suggestion should earn its place.
 
 For each suggestion, explain **why now** — what makes this the right item at this moment. Be specific: mention deadlines, recent momentum, blocking relationships, or team context. Also explain how it **fits the constraint** (e.g., "2-hour fit: migrate a batch of test files, each is self-contained").
 

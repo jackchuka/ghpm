@@ -1,6 +1,7 @@
 ---
 name: ghpm-view
 description: "Query GitHub Project items by named view or ad-hoc filter. Shows items in board, table, or roadmap format."
+argument-hint: "<view-name | filter> [--refresh]"
 allowed-tools: Bash(gh:*), Read, Grep
 ---
 

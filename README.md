@@ -101,11 +101,11 @@ The `prompts` block controls which actions ask for confirmation, scoped per skil
 }
 ```
 
-| Value | Behavior |
-|-------|----------|
+| Value      | Behavior                       |
+| ---------- | ------------------------------ |
 | `"prompt"` | Ask the user before proceeding |
-| `"auto"` | Proceed without asking |
-| `"skip"` | Skip the action entirely |
+| `"auto"`   | Proceed without asking         |
+| `"skip"`   | Skip the action entirely       |
 
 Resolution: `prompts.<skill>.<action>` → `prompts.<skill>.default` → `prompts.default` → `"prompt"`. First match wins.
 
@@ -113,8 +113,8 @@ Resolution: `prompts.<skill>.<action>` → `prompts.<skill>.default` → `prompt
 
 `ghpm-init` auto-detects your agent and offers to install hooks:
 
-| Agent | Enhancement | What it does |
-|-------|------------|-------------|
-| Claude Code | `.claude/hooks.json` | Session context + phase on every turn, wrap-up on exit |
+| Agent       | Enhancement                           | What it does                                                   |
+| ----------- | ------------------------------------- | -------------------------------------------------------------- |
+| Claude Code | `.claude/settings.json` (`hooks` key) | Session context + phase on every turn, stale session detection |
 
 Without hooks, everything works via explicit triggers: `decide: <text>` for decisions, "wrap up" for session end.

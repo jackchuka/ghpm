@@ -1,7 +1,6 @@
 ---
 name: ghpm-shared
 description: "Shared reference for all ghpm skills — prerequisites, config format, startup sequence, and error handling."
-allowed-tools: Bash(gh:*), Read, Grep
 ---
 
 # ghpm — Shared Reference
@@ -56,7 +55,7 @@ Default behavior (no config): always prompt.
 
 ## Agent Integrations
 
-Optional hooks/rules enhance `ghpm-work` sessions (auto session context, wrap-up on exit). See `references/integrations.md` for details. Installed by `/ghpm-init` when an agent is detected. Without hooks, all skills work via explicit commands.
+Optional hooks/rules enhance `ghpm-work` sessions (auto session context, stale session detection). See `references/integrations.md` for details. Installed by `/ghpm-init` when an agent is detected. Without hooks, all skills work via explicit commands.
 
 ## Skills
 

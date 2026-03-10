@@ -1,6 +1,7 @@
 ---
 name: ghpm-status
 description: "GitHub Project health dashboard. Shows workflow distribution, component health, team workload, items needing attention, and available views."
+argument-hint: "[scope (ex. team/component)]"
 allowed-tools: Bash(gh:*), Read, Grep
 ---
 

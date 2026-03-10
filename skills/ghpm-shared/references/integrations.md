@@ -13,9 +13,9 @@ The skill files themselves are agent-agnostic. Decision capture and session wrap
 
 Claude Code supports hooks that inject session context automatically.
 
-### Hooks
+### Hook
 
-Install to `.claude/hooks.json` in the project root. If the file already exists, merge the hooks into the existing structure.
+Install to `.claude/settings.json` in the project root under the `"hooks"` key. If the file already exists, merge the `"hooks"` key into the existing structure (preserve existing settings and hooks, add new ones).
 
 ```json
 {
@@ -26,18 +26,7 @@ Install to `.claude/hooks.json` in the project root. If the file already exists,
         "hooks": [
           {
             "type": "command",
-            "command": "branch=$(git branch --show-current 2>/dev/null); num=$(echo \"$branch\" | sed -n 's|[^/]*/\\([0-9]*\\)/.*|\\1|p'); if [ -n \"$num\" ] && [ -f \".ghpm/sessions/${num}.json\" ]; then title=$(grep -o '\"title\": *\"[^\"]*\"' \".ghpm/sessions/${num}.json\" | head -1 | sed 's/\"title\": *\"//;s/\"$//'); phase=$(grep -o '\"phase\": *\"[^\"]*\"' \".ghpm/sessions/${num}.json\" | head -1 | sed 's/\"phase\": *\"//;s/\"$//'); echo \"GHPM #${num} \\\"${title}\\\" [phase: ${phase:-setup}]. Record any choice about behavior, architecture, naming, rules, or trade-offs as a decision. Plans contain decisions — extract them after posting.\"; fi"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "branch=$(git branch --show-current 2>/dev/null); num=$(echo \"$branch\" | sed -n 's|[^/]*/\\([0-9]*\\)/.*|\\1|p'); if [ -n \"$num\" ] && [ -f \".ghpm/sessions/${num}.json\" ]; then echo \"GHPM_WRAP: Session #${num} is active. Run the wrap-up sequence from ghpm-work before ending.\"; fi"
+            "command": "branch=$(git branch --show-current 2>/dev/null); if [ -n \"$branch\" ] && [ -d \".ghpm/sessions\" ]; then for f in .ghpm/sessions/*.json; do [ -f \"$f\" ] || continue; sb=$(grep -o '\"branch\": *\"[^\"]*\"' \"$f\" | sed 's/\"branch\": *\"//;s/\"$//'); if [ \"$branch\" = \"$sb\" ]; then num=$(basename \"$f\" .json); title=$(grep -o '\"title\": *\"[^\"]*\"' \"$f\" | head -1 | sed 's/\"title\": *\"//;s/\"$//'); phase=$(grep -o '\"phase\": *\"[^\"]*\"' \"$f\" | head -1 | sed 's/\"phase\": *\"//;s/\"$//'); if [ \"$phase\" != \"done\" ]; then started=$(grep -o '\"started_at\": *\"[^\"]*\"' \"$f\" | sed 's/\"started_at\": *\"//;s/\"$//'); if [ -n \"$started\" ]; then started_epoch=$(date -jf '%Y-%m-%dT%H:%M:%SZ' \"$started\" '+%s' 2>/dev/null || date -d \"$started\" '+%s' 2>/dev/null); now_epoch=$(date '+%s'); if [ -n \"$started_epoch\" ] && [ $(( now_epoch - started_epoch )) -gt 86400 ]; then started_date=$(echo \"$started\" | cut -dT -f1); echo \"GHPM session #${num} \\\"${title}\\\" is stale (started ${started_date}). Wrap up with /ghpm-work ${num} or discard.\"; break; fi; fi; echo \"GHPM session #${num} \\\"${title}\\\" [${phase:-setup}]. Use /ghpm-work ${num} to resume.\"; fi; break; fi; done; fi"
           }
         ]
       }
@@ -46,9 +35,7 @@ Install to `.claude/hooks.json` in the project root. If the file already exists,
 }
 ```
 
-**UserPromptSubmit**: Injects active session context into every user message. This ensures decision detection survives context compression — the agent is reminded of the active session on every turn.
-
-**Stop**: Triggers wrap-up when the session ends, prompting the agent to post the session journal before exiting.
+**UserPromptSubmit**: Injects active session context into every user message. Matches the current git branch against each session file's `branch` field — convention-independent, no regex parsing of branch names. Skips `done` sessions. Detects stale sessions (>24h old) and warns instead of showing the normal resume hint.
 
 ### Installation
 

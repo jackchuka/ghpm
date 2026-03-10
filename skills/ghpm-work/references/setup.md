@@ -6,7 +6,7 @@
 
 2. **Check for existing session**: Read `.ghpm/sessions/<issue-number>.json` per `../../ghpm-shared/references/session.md`. If exists:
    - Read `phase` from the session file. If `phase` is `"done"`, tell the user this session is already complete and stop.
-   - If `phase` is missing (legacy session), treat as `"setup"` — all setup steps already happened, so resume from Clarify.
+   - If `phase` is missing, treat as `"setup"` — all setup steps already happened, so resume from Clarify.
    - Check out the existing branch.
    - Resume from the recorded phase per the resume table in SKILL.md.
    - Briefly show what's already done (branch, status, etc.) before continuing.
