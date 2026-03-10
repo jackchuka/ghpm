@@ -23,18 +23,27 @@ Each active work session is stored in `.ghpm/sessions/<issue-number>.json`. One 
 
 ## Reading Session
 
-1. Determine the current issue number from the git branch: extract the number segment from `{type}/{number}/{slug}`.
-2. Read `.ghpm/sessions/<number>.json`.
-3. If missing → no active session for this branch.
+1. Find the session file whose `branch` field matches the current git branch.
+2. Read that `.ghpm/sessions/<number>.json`.
+3. If no match → no active session for this branch.
 
 ## Finding Active Session from Branch
 
 ```bash
 branch=$(git branch --show-current 2>/dev/null)
-num=$(echo "$branch" | sed -n 's|[^/]*/\([0-9]*\)/.*|\1|p')
+if [ -n "$branch" ] && [ -d ".ghpm/sessions" ]; then
+  for f in .ghpm/sessions/*.json; do
+    [ -f "$f" ] || continue
+    sb=$(grep -o '"branch": *"[^"]*"' "$f" | sed 's/"branch": *"//;s/"$//')
+    if [ "$branch" = "$sb" ]; then
+      num=$(basename "$f" .json)
+      break
+    fi
+  done
+fi
 ```
 
-If `$num` is empty, the current branch doesn't match a session branch pattern.
+If `$num` is empty, no session file has a `branch` field matching the current branch.
 
 ## Writing Session
 

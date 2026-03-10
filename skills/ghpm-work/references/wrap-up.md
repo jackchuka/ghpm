@@ -1,6 +1,6 @@
 # Session Wrap Up
 
-Triggered by "wrap up", "done", or agent hooks (see `../../ghpm-shared/references/integrations.md`).
+Triggered by "wrap up" or "done".
 
 ## Steps
 

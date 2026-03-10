@@ -145,13 +145,13 @@ gh api graphql -f query='
     If detected, ask the user:
     ```
     Detected Claude Code. Install session hooks for ghpm-work? (y/n)
-    Hooks add: auto session context injection, wrap-up on exit.
+    Hooks add: auto session context injection, stale session detection.
     Without hooks, ghpm-work still works via explicit commands.
     ```
 
     If confirmed:
-    - Create `.claude/hooks.json` with the hooks defined in `../ghpm-shared/references/integrations.md`.
-    - If `.claude/hooks.json` already exists, merge ghpm hooks into the existing structure (preserve existing hooks, add new ones).
+    - Add the hooks from `../ghpm-shared/references/integrations.md` into `.claude/settings.json` under the `"hooks"` key.
+    - If `.claude/settings.json` already exists, merge the `"hooks"` key into the existing structure (preserve existing settings and hooks, add new ones).
 
     If declined or agent not detected, skip.
 
