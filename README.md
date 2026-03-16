@@ -40,6 +40,7 @@ ghpm-status [team]           # project health dashboard
 ghpm-view <name|filter>      # query items by view or ad-hoc filter
 ghpm-suggest [constraint]    # what should I work on next?
 ghpm-work <issue-number>     # full work lifecycle (see below)
+ghpm-issue [title]           # file an issue and add to project board
 ```
 
 ## ghpm-work: Full Lifecycle

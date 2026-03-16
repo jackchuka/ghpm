@@ -66,3 +66,4 @@ Optional hooks/rules enhance `ghpm-work` sessions (auto session context, stale s
 | [`ghpm-view`](../ghpm-view/SKILL.md)       | Query items by view or ad-hoc filter      |
 | [`ghpm-suggest`](../ghpm-suggest/SKILL.md) | Context-aware work recommendations        |
 | [`ghpm-work`](../ghpm-work/SKILL.md)       | Start a work session on an issue      |
+| [`ghpm-issue`](../ghpm-issue/SKILL.md)     | File an issue and add to project     |
