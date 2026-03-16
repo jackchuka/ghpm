@@ -1,6 +1,10 @@
 ---
 name: ghpm-shared
 description: "Shared reference for all ghpm skills — prerequisites, config format, startup sequence, and error handling."
+compatibility: "Requires gh CLI authenticated with read:project and project scopes"
+metadata:
+  author: jackchuka
+  scope: generic
 ---
 
 # ghpm — Shared Reference

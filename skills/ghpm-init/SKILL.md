@@ -3,6 +3,13 @@ name: ghpm-init
 description: "Initialize GitHub Project Management config. Auto-discovers project schema (fields, views, repos) and generates .ghpm/config.json + .ghpm/cache.json."
 argument-hint: "<project-url>"
 allowed-tools: Bash(gh:*), Bash(mkdir:*), Read, Write, Grep
+compatibility: "Requires gh CLI authenticated with read:project and project scopes"
+metadata:
+  author: jackchuka
+  scope: generic
+  confirms:
+    - save to filesystem
+    - modify settings files
 ---
 
 # ghpm-init

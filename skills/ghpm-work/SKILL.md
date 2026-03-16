@@ -3,6 +3,13 @@ name: ghpm-work
 description: "End-to-end work session on a GitHub Project item. Setup → Clarify → Plan → Implement → PR, with decisions captured throughout. Use when starting work on an issue, picking up a task, or resuming an interrupted session."
 argument-hint: "<issue-number>"
 allowed-tools: Bash(gh:*), Bash(git:*), Read, Write, Edit, Grep, Glob
+compatibility: "Requires gh CLI authenticated with read:project and project scopes"
+metadata:
+  author: jackchuka
+  scope: generic
+  confirms:
+    - create git commit
+    - create PR
 ---
 
 # ghpm-work

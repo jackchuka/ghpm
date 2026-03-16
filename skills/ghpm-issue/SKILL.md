@@ -3,6 +3,12 @@ name: ghpm-issue
 description: "File a GitHub issue and add it to the project board. Works mid-session or standalone. Reads .ghpm/config.json for repo list and project."
 argument-hint: "[title]"
 allowed-tools: Bash(gh:*), Bash(git:*), Read, Grep, Glob
+compatibility: "Requires gh CLI authenticated with read:project and project scopes"
+metadata:
+  author: jackchuka
+  scope: generic
+  confirms:
+    - create GitHub issues
 ---
 
 # ghpm-issue

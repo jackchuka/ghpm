@@ -3,6 +3,10 @@ name: ghpm-suggest
 description: "Suggest what to work on next based on project state and session context. Considers proximity, momentum, status, and constraints."
 argument-hint: "[any natural language constraint, e.g. 'I have 2 hours', 'I want to switch context', 'something small']"
 allowed-tools: Bash(gh:*), Bash(git:*), Read, Grep, Glob
+compatibility: "Requires gh CLI authenticated with read:project and project scopes"
+metadata:
+  author: jackchuka
+  scope: generic
 ---
 
 # ghpm-suggest
