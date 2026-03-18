@@ -24,138 +24,141 @@ File a GitHub issue and add it to the project board in one step. Works mid-sessi
 
 ## Workflow
 
-### 1. Load Config
+### Phase 1: Setup
 
-Read `.ghpm/config.json`. If missing, tell the user to run `/ghpm-init` and stop.
+1. **Startup sequence**: Follow the startup sequence in `../ghpm-shared/SKILL.md`. This loads config, refreshes cache if stale, and checks for stale sessions.
 
-Extract:
-- `config.project.id`, `config.project.owner`, `config.project.number`, `config.project.title`
-- `config.repos` — list of eligible repositories
-- `config.workflow.columns` — for setting Status
-- `config.workflow.field_id` — for the Status field mutation
+   Extract from config:
+   - `config.project` — id, owner, number, title
+   - `config.repos` — eligible repositories
+   - `config.workflow` — columns, field_id
+   - `config.fields` — project fields with name, id, type, options
+   - `config.conventions` — natural language rules (if present)
 
-### 2. Gather Info
+### Phase 2: Gather Info
 
-- If argument provided, use as **title**. Ask for an optional body (user can skip).
-- If no argument, ask for **title**, then ask for optional **body**.
+2. **Title and body**:
+   - If argument provided, use as **title**. Ask for an optional body (user can skip).
+   - If no argument, ask for **title**, then ask for optional **body**.
 
-### 3. Pick Repo
+3. **Pick repo**:
+   - If `config.repos` has **one entry** → use it.
+   - If `config.repos` is **empty or missing** → ask the user to specify a repo in `owner/repo` format.
+   - If `config.repos` has **multiple entries** → present a numbered list and ask.
 
-- If `config.repos` has **one entry** → use it.
-- If `config.repos` is **empty or missing** → ask the user to specify a repo in `owner/repo` format.
-- If `config.repos` has **multiple entries** → present a numbered list:
-  ```
-  Which repo?
-  1. tailor-platform/erp-kit
-  2. tailor-platform/frontend-packages
-  ```
+4. **Link to active session**: Find active session per `../ghpm-shared/references/session.md` (match current branch against session files). If found, prepend to the issue body:
+   ```
+   Related to <repo>#<num>
 
-### 4. Infer Labels
+   <original body>
+   ```
 
-Best-effort label inference from title and body keywords:
+### Phase 3: Infer Metadata
 
-| Keywords | Label |
-|----------|-------|
-| `bug`, `fix`, `broken`, `crash`, `error` | `bug` |
-| `feat`, `add`, `new`, `enhance`, `improve` | `enhancement` |
-| `doc`, `docs`, `readme`, `documentation` | `documentation` |
+All inference is best-effort. Skip silently when no confident match exists.
 
-If no keywords match, skip labels. Before using inferred labels, validate they exist on the target repo:
+5. **Infer labels**: Fetch the target repo's actual labels:
 
-```bash
-gh label list -R <repo> --json name --jq '.[].name'
-```
+   ```bash
+   gh label list -R <repo> --json name,description --jq '.[] | "\(.name)\t\(.description)"'
+   ```
 
-Only pass labels that exist. Drop any that don't — `gh issue create --label` will fail if the label is missing from the repo.
+   Match the issue title and body against the fetched label names and descriptions (case-insensitive substring/keyword matching). Only use labels that exist on the repo — never assume a label exists.
 
-### 5. Link to Active Session
+   If no labels match confidently, skip. Don't force a match.
 
-Check if an active `ghpm-work` session matches the current branch:
+6. **Infer initial status**: Use `config.workflow.columns` to determine the initial status:
+   - If `config.conventions.status_sync` is present, interpret it for new issue context (e.g., if it describes transitions from Planned, that implies new issues start at Planned or earlier).
+   - Otherwise, use the first column in `config.workflow.columns` as the default.
+   - Never hardcode a column name — always resolve from config.
 
-```bash
-branch=$(git branch --show-current 2>/dev/null)
-if [ -n "$branch" ] && [ -d ".ghpm/sessions" ]; then
-  for f in .ghpm/sessions/*.json; do
-    [ -f "$f" ] || continue
-    sb=$(grep -o '"branch": *"[^"]*"' "$f" | sed 's/"branch": *"//;s/"$//')
-    if [ "$branch" = "$sb" ]; then
-      num=$(basename "$f" .json)
-      break
-    fi
-  done
-fi
-```
+7. **Infer project fields**: Iterate over `config.fields` entries where `type` is `"single_select"` and `options` is non-empty. For each field, infer the best option from the issue context (title, body, labels, repo name):
+   - Compare each `options[].name` (case-insensitive) against the issue context for a substring or keyword match.
+   - If exactly one option matches confidently, use it. If ambiguous or no match, skip silently.
+   - When in doubt, skip rather than guess.
 
-If a session is found, prepend to the issue body:
-```
-Related to <repo>#<num>
+### Phase 4: Confirm and Create
 
-<original body>
-```
+8. **Confirm**:
 
-### 6. Confirm Before Creating
+   > **Prompt** (`create_issue`): Show the resolved issue details — title, repo, labels (if any), initial status, inferred fields — and ask: "Create this issue and add to <project.title>?"
 
-> **Prompt** (`create_issue`): "Create \"<title>\" in <repo> and add to <project.title>? (y/n)"
+   Resolve via `prompts.ghpm-issue.create_issue` per `../ghpm-shared/references/prompts.md`.
 
-Resolve via `prompts.ghpm-issue.create_issue` per `../ghpm-shared/references/prompts.md`.
+9. **Create issue**:
 
-### 7. Create Issue
+   ```bash
+   gh issue create -R <repo> --title "<title>" --body "<body>" [--label <labels>]
+   ```
 
-```bash
-gh issue create -R <repo> --title "<title>" --body "<body>" [--label <labels>]
-```
+   Extract the issue URL from stdout. Then fetch the node ID:
 
-Extract the issue URL from stdout (last line of output). Then fetch the node ID:
+   ```bash
+   gh issue view <url> --json number,url,id --jq '{number: .number, url: .url, nodeId: .id}'
+   ```
 
-```bash
-gh issue view <url> --json number,url,id --jq '{number: .number, url: .url, nodeId: .id}'
-```
+10. **Add to project**:
 
-### 8. Add to Project
+    ```bash
+    gh api graphql -f query='
+    mutation {
+      addProjectV2ItemById(input: {
+        projectId: "<config.project.id>"
+        contentId: "<issue nodeId>"
+      }) { item { id } }
+    }'
+    ```
 
-```bash
-gh api graphql -f query='
-mutation {
-  addProjectV2ItemById(input: {
-    projectId: "<config.project.id>"
-    contentId: "<issue nodeId>"
-  }) { item { id } }
-}'
-```
+    Extract the project item ID for field mutations.
 
-Extract the project item ID from the response for step 9.
+    **If this fails:** The issue still exists on GitHub. Report the URL and provide the manual fallback:
+    ```
+    Could not add to project. Add manually:
+      gh project item-add <config.project.number> --owner <config.project.owner> --url <issue-url>
+    ```
 
-**If this fails:** The issue still exists on GitHub. Report the URL and provide the manual fallback:
-```
-⚠ Could not add to project. Add manually:
-  gh project item-add <config.project.number> --owner <config.project.owner> --url <issue-url>
-```
+11. **Set status**: Using the status resolved in step 6:
 
-### 9. Set Status to Planned
+    ```bash
+    gh api graphql -f query='
+    mutation {
+      updateProjectV2ItemFieldValue(input: {
+        projectId: "<config.project.id>"
+        itemId: "<project item ID>"
+        fieldId: "<config.workflow.field_id>"
+        value: { singleSelectOptionId: "<resolved status column id>" }
+      }) { projectV2Item { id } }
+    }'
+    ```
 
-Find the "Planned" column in `config.workflow.columns` by name. If not found, use the first column.
+    If this fails, continue — the item is on the board, just without a status.
 
-```bash
-gh api graphql -f query='
-mutation {
-  updateProjectV2ItemFieldValue(input: {
-    projectId: "<config.project.id>"
-    itemId: "<project item ID from step 8>"
-    fieldId: "<config.workflow.field_id>"
-    value: { singleSelectOptionId: "<Planned column id>" }
-  }) { projectV2Item { id } }
-}'
-```
+12. **Set project fields**: For each field inferred in step 7, set via GraphQL (run mutations in parallel where possible):
 
-If this fails, continue — the item is on the board, just without a status.
+    ```bash
+    gh api graphql -f query='
+    mutation {
+      updateProjectV2ItemFieldValue(input: {
+        projectId: "<config.project.id>"
+        itemId: "<project item ID>"
+        fieldId: "<field.id>"
+        value: { singleSelectOptionId: "<matched option.id>" }
+      }) { projectV2Item { id } }
+    }'
+    ```
 
-### 10. Output
+    If a mutation fails, continue with remaining fields.
 
-```
-Created #<num> "<title>" in <repo>
-  Project: <config.project.title> (Planned)
-  URL: <issue-url>
-```
+### Phase 5: Output
+
+13. Format per `../ghpm-shared/references/format.md`:
+
+    ```
+    Created #<num> "<title>" in <repo>
+      Project: <config.project.title> (<resolved status>)
+      <field.name>: <option.name>  (for each field set in step 12)
+      URL: <issue-url>
+    ```
 
 ## Prompt Configuration
 
@@ -166,7 +169,6 @@ Action keys: `create_issue`.
 ## Tips
 
 - This skill does NOT create a work session. Use `/ghpm-work <number>` after filing to start working on the new issue.
-- No cache load or stale session check — keeps invocation fast.
 
 ## See Also
 
